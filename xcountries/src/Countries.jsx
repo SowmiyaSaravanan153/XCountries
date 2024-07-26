@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 
-function App() {
+function Countries() {
   const [countries, setCountries] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
       .then((response) => response.json())
-      .then((data) => setCountries(data))
-      .catch((error) => console.error("Error fetching data: ", error));
+      .then((data) => {
+        setCountries(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+        setIsError(true);
+        setIsLoading(false);
+      });
   }, []);
 
   const cardStyle = {
@@ -35,6 +44,14 @@ function App() {
     height: "100px"
   };
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>Error fetching data. Please try again later.</p>;
+  }
+
   return (
     <div style={containerStyle}>
       {countries.map((country) => (
@@ -51,4 +68,4 @@ function App() {
   );
 }
 
-export default App;
+export default Countries;

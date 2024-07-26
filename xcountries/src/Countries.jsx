@@ -6,16 +6,24 @@ function Countries() {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
+    // Perform the API call
     fetch("https://restcountries.com/v3.1/all")
-      .then((response) => response.json())
+      .then((response) => {
+        // Check if response status is 200
+        if (response.ok) {
+          return response.json(); // Parse JSON if status is OK
+        } else {
+          throw new Error(`HTTP error! Status: ${response.status}`); // Throw error if status is not OK
+        }
+      })
       .then((data) => {
-        setCountries(data);
-        setIsLoading(false);
+        setCountries(data); // Set data to state
+        setIsLoading(false); // Set loading to false after successful data fetch
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-        setIsError(true);
-        setIsLoading(false);
+        setIsError(true); // Set error state to true if there's an error
+        setIsLoading(false); // Set loading to false when there is an error
       });
   }, []);
 
@@ -45,11 +53,11 @@ function Countries() {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p>Loading...</p>; // Show loading message if isLoading is true
   }
 
   if (isError) {
-    return <p>Error fetching data. Please try again later.</p>;
+    return <p>Error fetching data. Please try again later.</p>; // Show error message if isError is true
   }
 
   return (

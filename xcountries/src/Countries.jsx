@@ -6,10 +6,9 @@ function Countries() {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    // Perform the API call
+    // Perform the API call when the component mounts
     fetch("https://restcountries.com/v3.1/all")
       .then((response) => {
-        // Check if response status is 200
         if (response.ok) {
           return response.json(); // Parse JSON if status is OK
         } else {
@@ -27,6 +26,7 @@ function Countries() {
       });
   }, []);
 
+  // Style definitions
   const cardStyle = {
     width: "200px",
     border: "1px solid #ccc",
@@ -44,7 +44,8 @@ function Countries() {
     flexWrap: "wrap",
     justifyContent: "center",
     alignItems: "center",
-    height: "100vh"
+    height: "100vh",
+    padding: "20px" // Added padding for better spacing
   };
 
   const imageStyle = {
@@ -52,14 +53,32 @@ function Countries() {
     height: "100px"
   };
 
+  // Return appropriate content based on the state
   if (isLoading) {
-    return <p>Loading...</p>; // Show loading message if isLoading is true
+    return (
+      <div style={containerStyle}>
+        <p>Loading...</p> {/* Display loading message */}
+      </div>
+    );
   }
 
   if (isError) {
-    return <p>Error fetching data. Please try again later.</p>; // Show error message if isError is true
+    return (
+      <div style={containerStyle}>
+        <p>Error fetching data. Please try again later.</p> {/* Display error message */}
+      </div>
+    );
   }
 
+  if (countries.length === 0) {
+    return (
+      <div style={containerStyle}>
+        <p>No countries found.</p> {/* Display message when no countries are found */}
+      </div>
+    );
+  }
+
+  // Display countries data
   return (
     <div style={containerStyle}>
       {countries.map((country) => (

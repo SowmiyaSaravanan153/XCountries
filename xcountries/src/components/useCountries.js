@@ -5,7 +5,7 @@ export default function useCountries() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("https://xcountries-backend.azurewebsites.net/all")
+    fetch("https://restcountries.com/v3.1/all")
       .then((response) => response.json())
       .then((data) => setCountries(data))
       .catch((error) => {

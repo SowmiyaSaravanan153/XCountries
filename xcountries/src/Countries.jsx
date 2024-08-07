@@ -14,7 +14,7 @@ function App() {
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-        setError(error);
+        setError(error.message || "Unknown error occurred");
         setLoading(false); // Set loading to false even if there's an error
       });
   }, []);
@@ -49,7 +49,7 @@ function App() {
   }
 
   if (error) {
-    return <div>Error fetching data. Please try again later.</div>; // Display error message if there's an error
+    return <div>Error fetching data: {error}. Please try again later.</div>; // Display error message if there's an error
   }
 
   return (

@@ -5,19 +5,40 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
-      .then((response) => response.json())
-      .then((data) => {
-        setCountries(data);
-        setLoading(false); // Set loading to false after data is fetched
-      })
-      .catch((error) => {
+  // useEffect(() => {
+  //   fetch("https://restcountries.com/v3.1/all")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setCountries(data);
+  //       setLoading(false); // Set loading to false after data is fetched
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data: ", error);
+  //       setError(error.message || "Unknown error occurred");
+  //       setLoading(false); // Set loading to false even if there's an error
+  //     });
+  // }, []);
+
+  useEffect(()=>{
+    const fetchData = async()=>{
+
+      try {
+       const res  = await fetch("https://restcountries.com/v3.1/all")
+       if(res.status === 200){
+        const data = await JSON(res);
+        setCountries(data)
+        setLoading(false)
+       }else{
+        console.log('Response status is not 200')
+       }
+      } catch (error) {
         console.error("Error fetching data: ", error);
         setError(error.message || "Unknown error occurred");
-        setLoading(false); // Set loading to false even if there's an error
-      });
-  }, []);
+        setLoading(false);
+      }
+    }
+    fetchData();
+  },[])
 
   const cardStyle = {
     width: "200px",

@@ -1,0 +1,32 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+}
+
+.country-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.country {
+  margin: 10px;
+  text-align: center;
+}
+
+.country img {
+  width: 100px;
+  height: auto;
+}
+
+.country span {
+  display: block;
+  margin-top: 5px;
+  font-size: 16px;
+  color: #333;
+}

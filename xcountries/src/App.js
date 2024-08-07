@@ -1,11 +1,16 @@
-import React from "react";
-import Countries from "./components/Countries";
-import "./styles.css";
+import React from 'react';
+import CountryList from './countriesList';
+import './App.css';
 
-export default function App() {
+const App = () => {
   return (
     <div className="App">
-      <Countries />
+      <header className="App-header">
+        <h1>XCOUNTRIES</h1>
+      </header>
+      <CountryList />
     </div>
   );
-}
+};
+
+export default App;

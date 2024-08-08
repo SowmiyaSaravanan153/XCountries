@@ -43,7 +43,7 @@ export default function Country({ Countryname }) {
                 setDetail(data);
             }
         } catch (e) {
-            console.log('Error: ', e);
+            console.log("Error fetching data:", e);
         }
     };
 

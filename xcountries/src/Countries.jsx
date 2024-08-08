@@ -1,96 +1,67 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 
-function App() {
-  const [countries, setCountries] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // useEffect(() => {
-  //   fetch("https://restcountries.com/v3.1/all")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setCountries(data);
-  //       setLoading(false); // Set loading to false after data is fetched
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data: ", error);
-  //       setError(error.message || "Unknown error occurred");
-  //       setLoading(false); // Set loading to false even if there's an error
-  //     });
-  // }, []);
-
-  useEffect(()=>{
-    const fetchData = async()=>{
-
-      try {
-       const res  = await fetch("https://restcountries.com/v3.1/all")
-       if(res.status === 200){
-        const data = await JSON(res);
-        setCountries(data)
-        setLoading(false)
-       }else{
-        console.log('Response status is not 200')
-       }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-        setError(error.message || "Unknown error occurred");
-        setLoading(false);
-      }
-    }
-    fetchData();
-  },[])
-
-  const cardStyle = {
-    width: "200px",
-    border: "1px solid #ccc",
-    borderRadius: "10px",
-    margin: "10px",
-    padding: "10px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center"
-  };
-
-  const containerStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh"
-  };
-
-  const imageStyle = {
-    width: "100px",
-    height: "100px"
-  };
-
-  if (loading) {
-    return <div>Loading...</div>; // Display loading message while data is being fetched
-  }
-
-  if (error) {
-    return <div>Error fetching data: {error}. Please try again later.</div>; // Display error message if there's an error
-  }
-
-  return (
-    <div style={containerStyle}>
-      {countries.map((country) => (
-        <div key={country.cca3} style={cardStyle}>
-          {country.flags && country.flags.png ? (
-            <img
-              src={country.flags.png}
-              alt={`Flag of ${country.name.common}`}
-              style={imageStyle}
-            />
-          ) : (
-            <div>No flag available</div>
-          )}
-          <h2>{country.name.common}</h2>
+function CardDetail({ name, image, alt }) {
+    return (
+        <div className='countryCard' style={{
+            width: '190px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '1px solid black',
+            padding: '10px',
+            margin: '10px',
+            height: '200px',
+            borderRadius: '8px',
+            overflow: 'hidden' // Ensure the image doesn't overflow the container
+        }}>
+            <img style={{
+                width: '100%',
+                height: 'auto', // Maintain aspect ratio
+                flexGrow: 1,
+                objectFit: 'cover' // Ensure the image covers the container
+            }} src={image} alt={alt} />
+            <h2 style={{ margin: '10px 0 0 0' }}>{name}</h2>
         </div>
-      ))}
-    </div>
-  );
+    );
 }
 
-export default App;
+export default function Country({ Countryname }) {
+    const [detail, setDetail] = useState([]);
+    const url = 'https://restcountries.com/v3.1/all';
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            if (Countryname !== '') {
+                const filteredData = data.filter((e) =>
+                    e.name.common.toLowerCase().includes(Countryname.toLowerCase())
+                );
+                setDetail(filteredData);
+            } else {
+                setDetail(data);
+            }
+        } catch (e) {
+            console.log('Error: ', e);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, [Countryname]);
+
+    return (
+        <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            height: '100vh',
+            paddingTop: '15px',
+            justifyContent: 'center'
+        }}>
+            {detail.map((data) => (
+                <CardDetail key={data.name.common} name={data.name.common} image={data.flags.png} alt={data.flags.alt} />
+            ))}
+        </div>
+    );
+}

@@ -15,12 +15,16 @@ function CardDetail({ name, image, alt }) {
             borderRadius: '8px',
             overflow: 'hidden'
         }}>
-            <img style={{
+            <img 
+            style={{
                 width: '100%',
                 height: 'auto',
                 flexGrow: 1,
                 objectFit: 'cover'
-            }} src={image} alt={alt || name} />
+            }} 
+             src={image || 'https://via.placeholder.com/190x200?text=No+Image'} // Default placeholder
+                alt={alt || 'Country flag'} // Default alt text
+             />
             <h2 style={{ margin: '10px 0 0 0' }}>{name}</h2>
         </div>
     );
@@ -28,22 +32,28 @@ function CardDetail({ name, image, alt }) {
 
 export default function Country({ Countryname }) {
     const [detail, setDetail] = useState([]);
-    const url = 'https://restcountries.com/v3.1/all';
+    const url = 'https://xcountries-backend.azurewebsites.net/all';
 
     const fetchData = async () => {
         try {
+            console.log("Fetching data from:", url);
             const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
             const data = await response.json();
+            console.log("Fetched data:", data);
             if (Countryname !== '') {
                 const filteredData = data.filter((e) =>
-                    e.name.common.toLowerCase().includes(Countryname.toLowerCase())
+                    e.name.toLowerCase().includes(Countryname.toLowerCase())
                 );
                 setDetail(filteredData);
             } else {
                 setDetail(data);
             }
         } catch (e) {
-            console.log("Error fetching data:", e);
+            console.error("Error fetching data:", e.message);
         }
     };
 
@@ -61,10 +71,10 @@ export default function Country({ Countryname }) {
         }}>
             {detail.map((data) => (
                 <CardDetail
-                    key={data.name.common}
-                    name={data.name.common}
-                    image={data.flags.png}
-                    alt={data.flags.alt}
+                    key={data.abbr}
+                    name={data.name}
+                    image={data.flag}
+                    alt={data.name}
                 />
             ))}
         </div>

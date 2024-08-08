@@ -13,14 +13,14 @@ function CardDetail({ name, image, alt }) {
             margin: '10px',
             height: '200px',
             borderRadius: '8px',
-            overflow: 'hidden' // Ensure the image doesn't overflow the container
+            overflow: 'hidden'
         }}>
             <img style={{
                 width: '100%',
-                height: 'auto', // Maintain aspect ratio
+                height: 'auto',
                 flexGrow: 1,
-                objectFit: 'cover' // Ensure the image covers the container
-            }} src={image} alt={alt} />
+                objectFit: 'cover'
+            }} src={image} alt={alt || name} />
             <h2 style={{ margin: '10px 0 0 0' }}>{name}</h2>
         </div>
     );
@@ -60,7 +60,12 @@ export default function Country({ Countryname }) {
             justifyContent: 'center'
         }}>
             {detail.map((data) => (
-                <CardDetail key={data.name.common} name={data.name.common} image={data.flags.png} alt={data.flags.alt} />
+                <CardDetail
+                    key={data.name.common}
+                    name={data.name.common}
+                    image={data.flags.png}
+                    alt={data.flags.alt}
+                />
             ))}
         </div>
     );
